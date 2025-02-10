@@ -1,4 +1,4 @@
-import { ChangeEventHandler, Suspense, useMemo, useState } from "react"
+import { ChangeEventHandler, Suspense, useCallback, useMemo, useState } from "react"
 import ReactDOM from "react-dom"
 import options from '@/assets/options.json'
 import BreedFilter from "@/components/BreedFilter"
@@ -27,18 +27,18 @@ export default function FiltersModal({ activeFilters, onApplyFilters, onClose }:
     onClose()
   }
 
-  const handleAddBreed = (breed: string) => {
+  const handleAddBreed = useCallback((breed: string) => {
     setActiveBreeds([...activeBreeds, breed])
-  }
+  }, [ activeBreeds ])
 
-  const handleRemoveBreed = (breed: string) => {
+  const handleRemoveBreed = useCallback((breed: string) => {
     setActiveBreeds(activeBreeds.filter(b => b !== breed))
-  }
+  }, [ activeBreeds ])
 
-  const handleAgeChange = (min: number, max: number) => {
+  const handleAgeChange = useCallback((min: number, max: number) => {
     setAgeMin(min)
     setAgeMax(max)
-  }
+  }, [ageMin, ageMax])
 
   const handleFavoritesOnly: ChangeEventHandler = (e) => {
     setShowFavoritesOnly((e.target as HTMLInputElement).checked)
@@ -128,7 +128,7 @@ export default function FiltersModal({ activeFilters, onApplyFilters, onClose }:
             {/* age range filter */}
             <div className="border-b-gray-200 border-b-1 pb-6 last:border-0">
               <span className="block text-lg font-medium py-4">Age range</span>
-              <RangeSlider 
+              <RangeSlider
                 rangeMin={options.ageMin} 
                 rangeMax={options.ageMax}  
                 valueLeft={ageMin}

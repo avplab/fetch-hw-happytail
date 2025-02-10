@@ -1,13 +1,14 @@
 import { SortOption } from "@/types";
 import Button from "@/components/Button"
 import Icon from "@/components/Icon"
+import { memo } from "react";
 
 export interface SortByProps {
   config: SortOption;
   onChange: (sortConfig: SortOption) => void;
 }
 
-export default function SortBy({ config, onChange }: SortByProps) { 
+export default memo(({ config, onChange }: SortByProps) => { 
   const handleField = (name: string) => {
     if (config.field === name) {
       if (config.order) {
@@ -41,4 +42,4 @@ export default function SortBy({ config, onChange }: SortByProps) {
       ))}
     </div>
   )
-}
+})

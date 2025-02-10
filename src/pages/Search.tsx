@@ -1,4 +1,4 @@
-import { createContext, useContext, useEffect, useReducer } from 'react'
+import { createContext, memo, useCallback, useContext, useEffect, useReducer } from 'react'
 import DogCard from '@/components/DogCard'
 import FavoriteBadge from '@/components/FavoriteBadge'
 import FilterButton from '@/components/FilterButton'
@@ -25,7 +25,7 @@ function useSearchContext(): SearchContextValue {
 
 const initialState: SearchState = {
   showFilterOptions: false,
-  searchOptions: {},
+  searchOptions: { sort: { field: 'breed', order: false }},
   activatedSearchOptionsCount: 0,
   favorites: new Set(),
   matchedDogs: [],
@@ -198,16 +198,16 @@ function FiltersOptions() {
     searchOptions,
   } = state
 
+  if (!showFilterOptions) {
+    return
+  }
+
   const handleApplyFilters = (filters: SearchOptions, activatedCount: number) => {
     actions.toggleFilterOptions(false)
     actions.setSearchOptions(filters)
     actions.setCurrentPage(1)
     actions.setActivatedSearchOptionsCount(activatedCount)
     actions.toggleFavoriteDogMatched(false)
-  }
-
-  if (!showFilterOptions) {
-    return
   }
 
   return (
@@ -254,27 +254,31 @@ function SearchResults() {
     return;
   }
 
-  console.log(favorites)
-
-  const handleFavorite = (dog: Dog) => {
-    actions.toggleFavorite(dog.id)
-  }
+  const handleFavorite = useCallback((dogId: string) => {
+    actions.toggleFavorite(dogId)
+  }, [])
 
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8 gap-y-10">
       {matchedDogs.map(dog => 
         <div key={dog.id} className="relative">
           <DogCard dog={dog} />
-          <span 
-            onClick={() => handleFavorite(dog)}
-            className="absolute right-0 top-0 w-14 h-14 p-2 cursor-pointer">
-            <FavoriteBadge active={favorites.has(dog.id)} />
-          </span>
+          <FavoriteBadgeOptim dogId={dog.id} onClick={handleFavorite} active={favorites.has(dog.id)} />
         </div>
       )}
     </div>
   )  
 }
+
+const FavoriteBadgeOptim = memo(({ dogId, onClick, active }: { dogId: string, onClick: (dogId: string) => void, active: boolean}) => {
+  return (
+    <span 
+      onClick={() => onClick(dogId)}
+      className="absolute right-0 top-0 w-14 h-14 p-2 cursor-pointer">
+      <FavoriteBadge active={active} />
+    </span>
+  )
+})
 
 function Pagination() {
   const { state, actions } = useSearchContext()
@@ -290,10 +294,10 @@ function Pagination() {
     return
   }
 
-  const handlePage = (page: number, from: number) => {
+  const handlePage = useCallback((page: number, from: number) => {
     actions.setCurrentPage(page)
     actions.setSearchOptions({...searchOptions, from, size: pageSize })
-  }
+  }, [ searchOptions ])
 
   return (
     <div className="sticky bottom-0 bg-white py-3">

@@ -1,4 +1,4 @@
-import { useRef, useMemo, MouseEventHandler } from 'react';
+import { useRef, useMemo, MouseEventHandler, memo } from 'react';
 
 function createCalc(rangeMin: number, rangeMax: number, element: Element | null) {
   return {
@@ -26,7 +26,7 @@ export interface RangeSliderProps {
   onChange: (minVal: number, maxVal: number) => void;
 }
 
-export default function RangeSlider({ rangeMin, rangeMax, valueLeft, valueRight, onChange }: RangeSliderProps) {  
+export default memo(({ rangeMin, rangeMax, valueLeft, valueRight, onChange }: RangeSliderProps) => {  
   const [ initialLeft, initialRight ] = useMemo(() => {
     const { percent } = createCalc(rangeMin, rangeMax, null)
     return [ percent(valueLeft), percent(valueRight) ]
@@ -111,4 +111,4 @@ export default function RangeSlider({ rangeMin, rangeMax, valueLeft, valueRight,
         />
     </div>
   </div>)
-}
+})

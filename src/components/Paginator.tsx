@@ -1,5 +1,6 @@
 import Button from "@/components/Button";
 import Icon from "@/components/Icon";
+import { memo } from "react";
 
 export interface PaginatorProps {
   total: number;
@@ -8,7 +9,7 @@ export interface PaginatorProps {
   onPage: (page: number, offset: number) => void;
 }
 
-export default function Paginator({ total, size = 25, current = 0, onPage }: PaginatorProps) {
+export default memo(({ total, size = 25, current = 0, onPage }: PaginatorProps) => {
   
   const visiblePages = 5
 
@@ -67,4 +68,4 @@ export default function Paginator({ total, size = 25, current = 0, onPage }: Pag
       </div>
     </div>
   )
-}
+})

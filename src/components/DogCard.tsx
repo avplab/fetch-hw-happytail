@@ -1,7 +1,12 @@
 import { Dog } from "@/types";
 import Icon from "@/components/Icon";
+import { memo } from "react";
 
-export default function DogCard({ dog }: { dog: Dog}) {
+export interface DogCardProps {
+  dog: Dog
+}
+
+export default memo(({ dog }: DogCardProps) => {
   return (
     <div className="flex flex-col gap-2">
       <div className="w-full aspect-square overflow-hidden">
@@ -19,4 +24,4 @@ export default function DogCard({ dog }: { dog: Dog}) {
       </div>
     </div>
   )  
-} 
+})
