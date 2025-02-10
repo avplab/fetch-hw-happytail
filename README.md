@@ -10,7 +10,7 @@ HappyTail is a platform for dog lovers to find and adopt shelter dogs in need of
 ### 1. Clone the Repository
 ```sh
 git clone https://github.com/avplab/fetch-hw-happytail.git
-cd happytail
+cd fetch-hw-happytail
 ```
 
 ### 2. Install Dependencies
