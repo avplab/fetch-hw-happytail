@@ -1,0 +1,8 @@
+{
+  "ageMin": 0,
+  "ageMax": 30,
+  "sortField": "breed",
+  "sortOrder": false,
+  "maxFavorites": 100,
+  "searchResultPageSize": 20
+}
